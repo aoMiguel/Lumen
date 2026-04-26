@@ -21,7 +21,7 @@ export function Intro() {
       <Image
         source={require('../assets/img/Logo.png')}
         style={{
-          width: 420,
+          width: 220,
           height: 620,
           resizeMode: 'contain',
         }}
