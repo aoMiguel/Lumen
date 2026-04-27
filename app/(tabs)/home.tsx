@@ -1,14 +1,54 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons, Feather } from '@expo/vector-icons';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Animated,
+} from 'react-native';
 import { useRouter } from 'expo-router';
 import { useNavigation } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { useRef, useState, useEffect } from 'react';
+
+type DrawerNavigation = DrawerNavigationProp<any>;
+
+function AnimatedButton({ children, onPress, isActive }: any) {
+  const translateY = useRef(new Animated.Value(isActive ? -10 : 0)).current;
+  const scale = useRef(new Animated.Value(isActive ? 1.2 : 1)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.spring(translateY, {
+        toValue: isActive ? -10 : 0,
+        useNativeDriver: true,
+      }),
+      Animated.spring(scale, {
+        toValue: isActive ? 1.2 : 1,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [isActive]);
+
+  return (
+    <TouchableWithoutFeedback onPress={onPress}>
+      <Animated.View
+        style={{
+          transform: [{ translateY }, { scale }],
+        }}
+      >
+        {children}
+      </Animated.View>
+    </TouchableWithoutFeedback>
+  );
+}
 
 export default function Homepage() {
   const router = useRouter();
   const navigation = useNavigation<DrawerNavigation>();
-  type DrawerNavigation = DrawerNavigationProp<any>;
+
+  const [active, setActive] = useState('home');
+
   return (
     <LinearGradient
       colors={['#0B0B12', '#1A1A2E', '#0B0B12']}
@@ -25,30 +65,74 @@ export default function Homepage() {
           onPress={() => navigation.openDrawer()}
         />
       </View>
+
       {/* CARD */}
       <View style={styles.card} />
 
       {/* BOTTOM BAR */}
       <View style={styles.bottomBar}>
-        <TouchableOpacity onPress={() => console.log('Já está na Home')}>
-          <Feather name="zap" size={20} color="white" />
-        </TouchableOpacity>
+        
+        <AnimatedButton
+          isActive={active === 'home'}
+          onPress={() => {
+            setActive('home');
+            router.push('/(tabs)/home');
+          }}
+        >
+          <Feather
+            name="zap"
+            size={20}
+            color={active === 'home' ? '#2ECC71' : 'white'}
+          />
+        </AnimatedButton>
 
-        <TouchableOpacity onPress={() => router.push('/(tabs)/home')}>
-          <Ionicons name="add" size={28} color="white" />
-        </TouchableOpacity>
+        <AnimatedButton
+          isActive={active === 'add'}
+          onPress={() => {
+            setActive('add');
+            router.push('/home');
+          }}
+        >
+          <Ionicons
+            name="add"
+            size={28}
+            color={active === 'add' ? '#2ECC71' : 'white'}
+          />
+        </AnimatedButton>
 
-        <TouchableOpacity onPress={() => router.push('/(tabs)/home')}>
-          <Ionicons name="book-outline" size={24} color="white" />
-        </TouchableOpacity>
+        <AnimatedButton
+          isActive={active === 'livro'}
+          onPress={() => {
+            setActive('livro');
+            router.push('/home');
+          }}
+        >
+          <Ionicons
+            name="book-outline"
+            size={24}
+            color={active === 'livro' ? '#2ECC71' : 'white'}
+          />
+        </AnimatedButton>
 
-        <TouchableOpacity onPress={() => router.push('/(tabs)/home')}>
-          <Ionicons name="dice" size={24} color="white" />
-        </TouchableOpacity>
+        <AnimatedButton
+          isActive={active === 'sorteio'}
+          onPress={() => {
+            setActive('sorteio');
+            router.push('/home');
+          }}
+        >
+          <Ionicons
+            name="dice"
+            size={24}
+            color={active === 'sorteio' ? '#2ECC71' : 'white'}
+          />
+        </AnimatedButton>
+
       </View>
     </LinearGradient>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -61,30 +145,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 14
-  },
-
-  avatar: {
-    backgroundColor: '#2ECC71',
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  avatarSmall: {
-    backgroundColor: '#2ECC71',
-    width: 35,
-    height: 35,
-    borderRadius: 18,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  avatarText: {
-    color: 'white',
-    fontWeight: 'bold',
+    paddingTop: 14,
   },
 
   card: {
@@ -92,30 +153,13 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     backgroundColor: '#1F2240',
     borderRadius: 30,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-end',
     padding: 20,
-
-    // sombra Android
     elevation: 10,
 
-    // sombra iOS
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.3,
     shadowRadius: 20,
-  },
-
-  floatingButton: {
-    position: 'absolute',
-    top: -25,
-    right: 20,
-    backgroundColor: '#2ECC71',
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 
   bottomBar: {
