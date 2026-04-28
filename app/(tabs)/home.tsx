@@ -82,7 +82,7 @@ export default function Homepage() {
           <Feather
             name="zap"
             size={20}
-            color={active === 'home' ? '#2ECC71' : 'white'}
+            color={active === 'home' ? '#6366F1' : 'white'}
           />
         </AnimatedButton>
 
@@ -96,7 +96,7 @@ export default function Homepage() {
           <Ionicons
             name="add"
             size={28}
-            color={active === 'add' ? '#2ECC71' : 'white'}
+            color={active === 'add' ? '#6366F1' : 'white'}
           />
         </AnimatedButton>
 
@@ -110,7 +110,7 @@ export default function Homepage() {
           <Ionicons
             name="book-outline"
             size={24}
-            color={active === 'livro' ? '#2ECC71' : 'white'}
+            color={active === 'livro' ? '#6366F1' : 'white'}
           />
         </AnimatedButton>
 
@@ -124,7 +124,7 @@ export default function Homepage() {
           <Ionicons
             name="dice"
             size={24}
-            color={active === 'sorteio' ? '#2ECC71' : 'white'}
+            color={active === 'sorteio' ? '#6366F1' : 'white'}
           />
         </AnimatedButton>
 
